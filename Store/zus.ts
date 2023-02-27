@@ -1,6 +1,7 @@
+
 import { create } from "zustand"
 import { persist, devtools } from "zustand/middleware"
-
+import immer from 'immer'
 // interface User {
 //   id: number
 //   title: string
@@ -38,7 +39,7 @@ import { persist, devtools } from "zustand/middleware"
 export const useTodos = create(
   devtools(
     persist(
-      (set, get: any) => ({
+      immer((set, get: any) => ({
         todos: [
           { id: 1, title: "one" },
           { id: 2, title: "two" },
@@ -48,14 +49,14 @@ export const useTodos = create(
             todos: [...get().todos, { id: get().todos.length + 1, title }],
           })
         },
-      }),
+      })),
       {
         name: "dada", // unique name
+        version: 1,
       }
     )
   )
 )
-
 
 // start
 export const useBearStore = create((set: any) => ({
