@@ -1,17 +1,17 @@
 import { create } from "zustand"
-// import { devtools, persist, immer } from "zustand/middleware"
+import { persist, devtools } from "zustand/middleware"
 
-interface User {
-  id: number
-  title: string
-}
+// interface User {
+//   id: number
+//   title: string
+// }
 
-interface UserState {
-  users: User[]
-  count: number
-  addUser: any
-  fetchUsers: any
-}
+// interface UserState {
+//   users: User[]
+//   count: number
+//   addUser: any
+//   fetchUsers: any
+// }
 
 // export const useUsersStore = create<UserState>()(
 //   persist(
@@ -35,17 +35,27 @@ interface UserState {
 //   )
 // )
 
-export const useTodos = create((set) => ({
-  todos: [
-    { id: 1, title: "one" },
-    { id: 2, title: "two" },
-  ],
-  addTodo: (title: string) =>
-    set((state: any) => {
-      const newTodo = { id: state.todos.length + 1, title: title }
-      return { todos: [...state.todos, newTodo] }
-    }),
-}))
+export const useTodos = create(
+  devtools(
+    persist(
+      (set, get: any) => ({
+        todos: [
+          { id: 1, title: "one" },
+          { id: 2, title: "two" },
+        ],
+        addTodo: (title: any) => {
+          set({
+            todos: [...get().todos, { id: get().todos.length + 1, title }],
+          })
+        },
+      }),
+      {
+        name: "dada", // unique name
+      }
+    )
+  )
+)
+
 
 // start
 export const useBearStore = create((set: any) => ({
